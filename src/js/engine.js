@@ -90,10 +90,11 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        player.update();
+        //allEnemies.forEach(function(enemy) {
+        //enemy.update(dt);
+        //});
+        //console.log('passed dt = ' + dt);
+        player.handleInput(dt);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -102,7 +103,7 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
-    function render() {
+    function render() { 
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
@@ -149,9 +150,9 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
+        //allEnemies.forEach(function(enemy) {
+        //    enemy.render();
+        //});
 
         player.render();
     }

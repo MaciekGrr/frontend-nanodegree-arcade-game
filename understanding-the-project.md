@@ -103,7 +103,7 @@ Here's where we need to put our work. Read next section.
 ## What I need to do 
 Taking info directly from the project details, there are three tasks to do:
 1. implement the Enemy class (constructor)
-2. implement the Player class
+2. implement the Player class (constructor)
 3. initate Emeny and Player objs (instances/subclasses)
 
 ### Enemy Class
