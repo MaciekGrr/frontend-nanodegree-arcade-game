@@ -91,10 +91,10 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         //allEnemies.forEach(function(enemy) {
-        //enemy.update(dt);
+            enemy.update(dt);
         //});
-        //console.log('passed dt = ' + dt);
-        player.handleInput(dt);
+        //console.log('passed dt = ' + dt);   
+        player.update(dt);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -153,7 +153,7 @@ var Engine = (function(global) {
         //allEnemies.forEach(function(enemy) {
         //    enemy.render();
         //});
-
+        enemy.render();
         player.render();
     }
 

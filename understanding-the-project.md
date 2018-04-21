@@ -119,23 +119,36 @@ For this, we need to *complete* what follows:
     
 ### Player Class
 For this, we need to *implement our own Player class*. This means to:
-1. create a Player function that initiates the Player by doing this:
-    * load the Player img by setting this.sprite to the appropriate folder
-    * set the Player initial location
+v1. create a Player function that initiates the Player by doing this:
+    //* load the Player img by setting this.sprite to the //appropriate folder
+    //* set the Player initial location
     
-2. update the Player method:
-    * update Player location
-    * handle collision with Enemy
+v2. update the Player method:
+    //* update Player location
     
-3. implement the render method for the Enemy (hint: use code from Enemy.render())
+v3. implement the render method for the Player (hint: use code from Enemy.render())
 
-4. implement the handleInput method, that:
-    * should receive user input (one of the allowedKeys)
-    * and move the player according to said input:
-        - L key->move left
-        - R key->move right
-        - U key->move up
-        - D key->move down
+v4. implement Player.handleInput method, that:
+    //* should receive user input (one of the allowedKeys)
+    //* move the player according to said input:
+        //- L key->move left
+        //- R key->move right
+        //- U key->move up
+        //- D key->move down
+    //* forbid movements off-screen
+    //* when touch water, reset
+
+5. implement Enemy render
+
+5. implement Enemy update
+
+6. implement allEnemies render
+
+7. implement checkCollisions between enemy and player
+
+8. implement reset
+        
+        
         
 ### Initiate Enemy and Player
 Initiate Enemy and Player (create new objects - in other words: new instances of them) by doing this:

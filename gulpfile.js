@@ -137,11 +137,11 @@ gulp.task('useref', function() {
 gulp.task('imagemin', function() {
   return gulp.src('src/images/**/*.+(png|jpg|jpeg|gif|svg)')
     // Caching images that ran through imagemin
-    .pipe(cache(imagemin({
+    .pipe(imagemin({
       progressive: true,
       interlaced: true,
       use: [pngquant()]
-    })))
+    }))
     .pipe(gulp.dest('docs/images'))
 });
 

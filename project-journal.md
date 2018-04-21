@@ -201,3 +201,60 @@ In enemy.update dt is a number, not undefined.
 In fact, when I remove the handleInput call from within update, it prints dt. The problem now is that this way Player.update() is called infinitely.
     
 TODO: write down what happens in the program when player wants to move character
+
+***
+
+## Day 3 - Sat 21/4/18
+5:07am - ok, let's see what happens when player presses an arrow k, right for example.
+
+So rk is pressed. event listner calls player.handleInput (the object we instantiate from its class). This calls back its class method (Player.prototype.handleInput), which takes the key pressed as argument. Based on the key pressed: HandleInput can tell the program in which direction to move. 
+
+Then, handleInput should tell update() said move so that update() can recalculate char position.
+
+At this point, once there's a new position for the char, render() can rewrithe the char image in the newly calculated position.
+
+But here's the thing: the dt parameter should then belong only to update. handleInput finds the movement direction (+x,-x,+y,-y) and tell it to update(). In handelInput I return said mov dir. Then I can call handleInput from whithin update. 
+
+5:53am - kind of ok. I set direction as global var in class scope, then recalled in handleInput, set it to key, returned and used in update. 
+
+The char moves to the right when k is pressed BUT it does it infinitely. Not just once. Update still runs in a continuous loop.
+
+6:42am ok so if I avoid printing on the console the browser doesn't crash. So this is how the game works of course. It's just my laptop.
+
+Ok so back at square one. Have game screen printed w/ only char. Char moves but doesn't stop
+
+8:03am - now update is telling: move to the right by this much. This at each tick. So move move move move move...etc
+
+9:48am - I created a workaround to stop movement. There is a problem though: movement is fluid, not step-by-step. The fact is my wa tells to move in that direction until keyUp is false. 
+
+The instruction to move should be a one-time thing.
+
+That is "move to the right by [pixels] and then stop.
+You stop when you don't have speed. So speed should be 0 to tell this.
+But I set speed in handleInput, so 
+
+10:34am - for fruhstuck's sake, I had only to set speed to 0 right after the movement in update. :/
+
+It was that simple. 
+
+...
+
+12:11am - at this point I covered most requirements for player.
+I can move on to the enemy.
+
+There are some things to do:
+- update enemy location (random between bounds)
+- randomize enemy speed: should be a random number between 0 and maxV (say, 200)
+- instantiate allEnemies
+- make sure to delete enemies from memory once they get out of bounds, so that memory frees up for new bugs to generate at next update. (this may be some complicated bu who cares). 
+
+But in order.
+
+TODO: render enemy in fixed pos to test render.
+12:49am - done. Also found enemy.y and enemy.x bounds
+
+Should update enemy location so that is random. Oh and set enemy starting position offscreen. Like if 0 has enemy's ass on left screen border, then starting p should be somth like -100? Hmm. Tested it, so yeah somth in between 50 and 100. I went to 80.
+
+So enemy's initial x is set off screen. 
+
+TODO: randomize enemy.x at each update so that it gets generate at a random row at each update. This will need adjustment to integrate with allEnmies, once I get there.

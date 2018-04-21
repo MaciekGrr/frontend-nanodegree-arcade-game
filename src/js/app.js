@@ -1,15 +1,17 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     
-    // Set the enemy initial location
-    this.x = 0;
-    this.y = 606;
+    // Set the enemy location
+    this.x = -80;
+    this.y = 60; // upper row
+    // this.y = 140; // middle row
+    // this.y = 230; // bottom row
     
     // Set enemy speed
-    //this.speed = speed;
-    
+    this.speed = 50;
+        
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -21,9 +23,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    console.log('Enemy.prototype -> dt = ' + dt);
-    this.x += (this.x * dt);
-    
+    this.x += (this.speed * dt);
 };
 
 // Draw the enemy on the screen, required method for game
@@ -40,52 +40,63 @@ Enemy.prototype.render = function() {
 var Player = function(){
         
     // Set initial location
-    this.x = 100;
+    this.x = 200;
     this.y = 400;
-    
+            
     // Set initial speed
-    //
+    this.speed;
     
+    this.isKeyUp = true;
+    
+    this.direction = '';
+        
     // Set player character
     this.sprite = 'images/char-boy.png';
 }
 
-// Player update method
+// Updates player position
 Player.prototype.update = function(dt) {
+        
+    if(this.direction === 'right'){
+        this.x += (this.speed * dt);
+        this.speed = 0;
+    } else if (this.direction === 'left'){
+        this.x -= (this.speed * dt);
+        this.speed = 0;
+    } else if (this.direction === 'up'){
+        this.y -= (this.speed * dt);
+        this.speed = 0;
+    } else if (this.direction === 'down'){
+        this.y += (this.speed * dt);
+        this.speed = 0;
+    }
     
-    // Test if dt is passed
-    console.log('Player.prototype -> dt = ' + dt);
-    
-    // TODO: update player position
-    //this.x = this.handleInput() * dt;
-    //this.y = this.handleInput() * dt;
-    
-    // Calculate update position accordingly
 }   
 
 // Player handleInput() method
 Player.prototype.handleInput = function(key) {
     
-    //console.log('Player.prototype.handleInput -> dt = ' + dt);
-    
-    // move player accordingly
-    if(key === 'left'){
-        this.x -= this.x * dt;
-    } else if(key === 'right'){
+    // handle direction and speed of movement
+    if(key === 'right' && this.isKeyUp && this.x < Math.round(390)){
+        this.direction = 'right';
+        this.speed = 3100;  
+    } else if(key === 'left' && this.isKeyUp && this.x > 33){
+        this.direction = 'left';
+        this.speed = 3100;  
         console.log(this.x);
-        console.log('this.x -> type -> ' + typeof this.x);
-        console.log('dt -> type -> ' + dt);
-        this.x += this.x * dt;
-        console.log(this.x);
-    } else if(key === 'up'){
-        this.y += this.y * dt;
-    } else if(key === 'dowm'){
-        this.y -= this.y * dt;
-    } 
+    } else if(key === 'up' && this.isKeyUp && this.y > 40.1) {
+        this.direction = 'up';
+        this.speed = 3100;  
+        console.log(this.y);
+    } else if(key === 'up' && this.isKeyUp && this.y < 40.1){
+        setTimeout(function(){
+            alert(this.y + 'hit water!');
+        }, 300)
+    } else if(key === 'down' && this.isKeyUp && this.y < 400){
+        this.direction = 'down';
+        this.speed = 3100;  
+    }
     
-    // forbid offscreen moves
-    
-    // handle water -> win game -> reset game (maybe separate method for this)
 }
 
 // Player render() method: draws player character on the screen
@@ -93,14 +104,13 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
 // Instantiate player object
 var player = new Player();
-
+    
 // Instantiate allEnemies object
 var allEnemies = [];
 var enemy = new Enemy();
@@ -115,7 +125,8 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
+    
+    player.isKeyUp = true;
+    
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
