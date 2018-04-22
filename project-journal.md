@@ -258,3 +258,50 @@ Should update enemy location so that is random. Oh and set enemy starting positi
 So enemy's initial x is set off screen. 
 
 TODO: randomize enemy.x at each update so that it gets generate at a random row at each update. This will need adjustment to integrate with allEnmies, once I get there.
+
+***
+
+## Day 4 - Sun 22/4/18
+5:15am - continue from where I left yesterday.
+
+TASKS: 
+v- when enemy is offscreen, update its location 
+v- update enemy location (random between bounds)
+v- randomize enemy speed: should be a random number between 0 and maxV (say, 200)
+- instantiate allEnemies
+- make sure to delete enemies from memory once they get out of bounds, so that memory frees up for new bugs to generate at next update. (this may be some complicated bu who cares).
+
+TODO: when enemy is offscreen, reset its location.
+
+5:28am - it was a matter of checking enemy.x value off-screen and put an if statement in update
+
+TODO: update enemy location between random bounds. Mmm not a random n between max min. It should be one of upper, mid or lower row. One of these 3. How?
+
+Well I can generate a random number between 1 and 3, then decide which row to generate the eneny based on that. Let's start with two rows.
+...
+Enemies are generated BUT at each tick of the game. Should fix it. Enemy should be created let's say when one reaches second square.
+...
+The same happens. Maybe is because I keep generating the same bug everytime.
+...
+To make it work I set the check this.x when enemy is off-screen.
+
+TODO: randomize enemy speed, to update when e is off-screen. Ok but randomize. So should be n between limits. min shoudn't be too low. Max ok.
+Let's see what I can find.
+...
+Values I found for speed:
+- low->300
+- mid->400
+- high->500
+
+So again, I can use the same three if statements to generate this speed. And it works. 
+
+For tomorrow.
+
+TASK 
+- instantiate allEnemies
+- make sure to delete enemies from memory once they get out of bounds, so that memory frees up for new bugs to generate at next update. (this may be some complicated bu who cares).
+
+TODO: instantiate allEnemis. Things to consider: 
+* there should be 3 enemy obj, one for each row.
+* when initiating allEnemies, should contain these 3 objs.
+* allEnemies has a forEach method on it that applies update on each obj. Do the current update method allows to be free of bugs?
