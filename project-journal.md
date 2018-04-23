@@ -204,7 +204,7 @@ TODO: write down what happens in the program when player wants to move character
 
 ***
 
-## Day 3 - Sat 21/4/18
+# Day 3 - Sat 21/4/18
 5:07am - ok, let's see what happens when player presses an arrow k, right for example.
 
 So rk is pressed. event listner calls player.handleInput (the object we instantiate from its class). This calls back its class method (Player.prototype.handleInput), which takes the key pressed as argument. Based on the key pressed: HandleInput can tell the program in which direction to move. 
@@ -261,7 +261,7 @@ TODO: randomize enemy.x at each update so that it gets generate at a random row 
 
 ***
 
-## Day 4 - Sun 22/4/18
+# Day 4 - Sun 22/4/18
 5:15am - continue from where I left yesterday.
 
 TASKS: 
@@ -305,3 +305,56 @@ TODO: instantiate allEnemis. Things to consider:
 * there should be 3 enemy obj, one for each row.
 * when initiating allEnemies, should contain these 3 objs.
 * allEnemies has a forEach method on it that applies update on each obj. Do the current update method allows to be free of bugs?
+
+***
+
+# Day 5 - Mon 23/4/18
+5:12am
+TASKS
+v- instantiate allEnemies
+v- make sure to delete enemies from memory once they get out of bounds, so that memory frees up for new bugs to generate at next update. (this may be some complicated bu who cares).
+v- Vehicle-player collisions happen logically (not too early or too late)
+v- Vehicle-player collision resets the game
+- Something happens when player wins
+
+TODO: instantiate allEnemis. Things to consider: 
+* there should be 3 enemy obj, one for each row.
+* when initiating allEnemies, should contain these 3 objs.
+* allEnemies has a forEach method on it that applies update on each obj. Do the current update method allows to be free of bugs?
+
+allEnemies. How do I go about generating allEnemies object, in a way that they get generated infinitely, w/o replacing the one currenty going on the road?
+...
+By instantiating 3 enemy objs, and pushing them to allEnemies, the game engine goes on. It generates bugs each time one hits off-screen. Because I set their speed to be random, there's the illusion that game creates enemies all the time.
+
+TODO: implement checkCollisions
+Hm. How should I check collisions? A collision happens when enemy and player are at the same location (i.e. same x,y coordinates). 
+When this should happen? After each update, enemy and player are available globally, so I can handle this in the engine directly.
+Hence, if p and e have same xy coordinates, put p to starting location again.
+...
+Hm. Not working. Probably it's considering the exact coordinate the problem. Let's try < and >.
+
+[slept from 8 to 9:27am]
+
+9:38am - found on MDN the rectangle approach to sprite collision. Let's test it first.
+...
+Seems to work. So basically I set width and height for both player and enemy objs. Then, considered they are on x and y axes, I check that there is no gap between them. If that's true then a collision happened. And since the images have transparent border and height is greater that seeable height, I set a lower height than the real one, so that collisions happen at the right time.
+
+Now when collisions happen I can put p to initial location. Yeah but checkCollision should return something. 
+...
+How stupid: I was only resetting player.x
+
+TODO: something happen when player resets the game 
+When player wins show win-modal.
+Modal:
+* message
+* restart button->triggers page refresh
+
+In app.js I can build a function that handles modal display. Then I can add an event listener that triggers when restart button is clicked.
+So:
+* build modal
+* build modal fn
+* build modal evt listener
+
+[wsl]
+
+12:29pm - 

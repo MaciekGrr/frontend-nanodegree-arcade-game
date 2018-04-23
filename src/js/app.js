@@ -1,3 +1,6 @@
+const modalBtn = document.getElementById('modal-btn');
+const modalBox = document.getElementById('win-modal');
+
 // Enemies our player must avoid
 var Enemy = function (x, y) {
 	// Variables applied to each of our instances go here,
@@ -5,15 +8,18 @@ var Enemy = function (x, y) {
 
 	// Set enemy location
 	this.x = -120;
-	
+
 	// Set enemy initial location
-	this.y = 60; 
-	
+	this.y = 60;
+
+	this.width = 90;
+	this.height = 50;
+
 	// Set enemy initial speed
 	this.speed = 250; // low
 	this.speed = 400; // medium
 	this.speed = 500; // high
-	
+
 	// The image/sprite for our enemies, this uses
 	// a helper we've provided to easily load images
 	this.sprite = 'images/enemy-bug.png';
@@ -22,28 +28,28 @@ var Enemy = function (x, y) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
-	d
+
 	// Calculate random number between 1 and 3
 	let randomN = Math.floor((Math.random() * 3) + 1);
 
 	// When enemy is off-screen
 	// randomize new position at which it's created
 	if (this.x > 520) {
-		
+
 		// Reset x coordinate to off-screen
 		// left side
 		this.x = -120;
-		
+
 		// Generate enemy on one of the stone rows
 		if (randomN === 1) {
 			this.y = 60;
-			this.speed = 300;
+			this.speed = 500;
 		} else if (randomN === 2) {
 			this.y = 140;
-			this.speed = 400;
+			this.speed = 600;
 		} else if (randomN === 3) {
 			this.y = 230;
-			this.speed = 500;
+			this.speed = 700;
 		}
 	}
 
@@ -56,6 +62,20 @@ Enemy.prototype.render = function () {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Parameter: check if enemy and player collide.
+// If so, reset player to its initial location
+Enemy.prototype.isCollide = function () {
+
+	if (this.x < player.x + player.width &&
+		this.x + this.width > player.x &&
+		this.y < player.y + player.height &&
+		this.y + this.height > player.y) {
+
+		player.x = 200;
+		player.y = 400;
+	}
+}
+
 
 /*-----------------------------------------------------------------
  *-----------------------------------------------------------------
@@ -67,6 +87,9 @@ var Player = function () {
 	// Set initial location
 	this.x = 200;
 	this.y = 400;
+
+	this.width = 90;
+	this.height = 50;
 
 	// Set initial speed
 	this.speed;
@@ -104,19 +127,18 @@ Player.prototype.handleInput = function (key) {
 	// handle direction and speed of movement
 	if (key === 'right' && this.isKeyUp && this.x < 380) {
 		this.direction = 'right';
-		this.speed = 3100;
+		this.speed = 4000;
 	} else if (key === 'left' && this.isKeyUp && this.x > 33) {
 		this.direction = 'left';
-		this.speed = 3100;
-		console.log(this.x);
-	} else if (key === 'up' && this.isKeyUp && this.y > 40.1) {
+		this.speed = 4000;
+	} else if (key === 'up' && this.isKeyUp && this.y > 41) {
 		this.direction = 'up';
 		this.speed = 3100;
-		console.log(this.y);
-	} else if (key === 'up' && this.isKeyUp && this.y < 40.1) {
+	} else if (key === 'up' && this.isKeyUp && this.y < 41) {
+		// display win modal
 		setTimeout(function () {
-			alert(this.y + 'hit water!');
-		}, 300)
+			modalBox.style.display = 'block';
+		}, 200);
 	} else if (key === 'down' && this.isKeyUp && this.y < 400) {
 		this.direction = 'down';
 		this.speed = 3100;
@@ -129,17 +151,21 @@ Player.prototype.render = function () {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+//Player.prototype.isGameWon = function () {
+//}
 
 // Instantiate player object
 var player = new Player();
 
+// Instantiate enemy objects
+var enemy0 = new Enemy();
+var enemy1 = new Enemy();
+var enemy2 = new Enemy();
+
 // Instantiate allEnemies object
 var allEnemies = [];
-var enemy = new Enemy();
-allEnemies.push(enemy);
+
+allEnemies.push(enemy0, enemy1, enemy2);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -154,4 +180,10 @@ document.addEventListener('keyup', function (e) {
 	player.isKeyUp = true;
 
 	player.handleInput(allowedKeys[e.keyCode]);
+
 });
+
+modalBtn.addEventListener('click', function () {
+	//modalBox.style.display = 'none';
+	window.location.reload(false);
+})

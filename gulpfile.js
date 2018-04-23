@@ -1,5 +1,4 @@
 const gulp = require('gulp'),
-      sass = require('gulp-sass'),
       browserSync = require('browser-sync'),
       useref = require('gulp-useref'),
       uglify = require('gulp-uglify'),
@@ -31,19 +30,6 @@ gulp.task('browserSync', function() {
   })
 })
 
-// sass
-gulp.task('sass', function() {
-  return gulp.src('src/scss/**/*.scss') // Gets all files ending with .scss in src/scss and children dirs
-    .pipe(sass().on('error', sass.logError)) // Passes it through a gulp-sass, log errors to console
-    .pipe   (autoprefixer({
-        browsers: ['last 2 versions']
-    }))
-    .pipe(gulp.dest('src/css')) // Outputs it in the css folder
-    .pipe(browserSync.reload({ // Reloading with Browser Sync
-      stream: true
-    }));
-})
-
 // eslint
 gulp.task('lint', () => {
     // ESLint ignores files with "node_modules" paths.
@@ -68,7 +54,7 @@ gulp.task('default', ['lint'], function () {
 
 // Watchers
 gulp.task('watch', function() {
-  gulp.watch('src/scss/**/*.scss', ['sass']).on("change", browserSync.reload);
+  gulp.watch('src/css/**/*.css', browserSync.reload);
   gulp.watch('src/*.html', browserSync.reload);
   gulp.watch('src/js/**/*.js', browserSync.reload);
 })
@@ -180,7 +166,7 @@ gulp.task('clean', function() {
 
 // Build development version
 gulp.task('default', function(callback) {
-  runSequence(['sass', 'lint', 'browserSync'], 'watch',
+  runSequence(['lint', 'browserSync'], 'watch',
     callback
   )
 });
@@ -189,7 +175,7 @@ gulp.task('default', function(callback) {
 
 // Build production version
 gulp.task('build', function(callback) {
-  runSequence('clean', 'sass', ['useref', 'images:minify', 'fonts'],
+  runSequence('clean', ['useref', 'images:minify', 'fonts'],
     callback
   )
 });
