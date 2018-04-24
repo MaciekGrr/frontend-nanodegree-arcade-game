@@ -89,9 +89,9 @@ var Engine = (function (global) {
 	 * render methods.
 	 */
 	function updateEntities(dt) {
-		allEnemies.forEach(function (enemy) {
-			enemy.update(dt);
-		});
+//		allEnemies.forEach(function (enemy) {
+//			enemy.update(dt);
+//		});
 		player.update(dt);
 	}
 
@@ -182,8 +182,9 @@ var Engine = (function (global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
-    ]);
+        'images/char-boy.png',
+        'images/Heart.png'
+	]);
 	Resources.onReady(init);
 
 	/* Assign the canvas' context object to the global variable (the window

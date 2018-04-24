@@ -12,8 +12,8 @@ var Enemy = function (x, y) {
 	// Set enemy initial location
 	this.y = 60;
 
-	this.width = 90;
-	this.height = 50;
+	this.width = 80;
+	this.height = 40;
 
 	// Set enemy initial speed
 	this.speed = 250; // low
@@ -88,8 +88,8 @@ var Player = function () {
 	this.x = 200;
 	this.y = 400;
 
-	this.width = 90;
-	this.height = 50;
+	this.width = 80;
+	this.height = 40;
 
 	// Set initial speed
 	this.speed;
@@ -100,6 +100,10 @@ var Player = function () {
 
 	// Set player character
 	this.sprite = 'images/char-boy.png';
+	
+	// Set player life
+	this.life = 'images/Heart.png';
+	
 }
 
 // Updates player position

@@ -357,4 +357,45 @@ So:
 
 [wsl]
 
-12:29pm - 
+***
+
+# Day 6 - Tue 24/4/18
+5:37am - before making the customization I need to regulate how winning happens, because now it's too late.
+...
+Problem is not winning but collision happening too soon.
+...
+Set height to from 50 to 40, width from 90 to 70: now game is more playable. Can start customization.
+
+How can I customize it. Let's see:
+* change sprites based on theme
+* select char based on theme
+* give different char selection based on theme choosen
+* make score feature based on gems
+* give only 2 lives to start off.
+* when player hits 
+...
+Noticing I'm wasting some time thinking about what I can do. Hmmm. Before even thinking to make multiple theme, it's better to focus on one. 
+So goal: customize game w/my theme. 
+...
+Theme: Mario. 
+...
+Wait. Learn from mistakes. No need for custom theme now. Don't go into royalty issues.
+
+Let's implement additional features w/game assets for now. The rest can come later.
+It's not a game that'll make or break job. It's websites. So this is nice ok, but that's it. Add custom features but leave thme as it is.
+
+[Features I can add: 
+* lives
+* char selection
+* levels]
+
+Let's start, then let's see.
+
+TODO: add lives feature.
+Player should start with 3 lives. Each time he hits a bug loses one. When lives finish-> game over
+- show 3 lives
+- lose 1 life at collision
+- if life === 0: gameover
+
+TODO: show 3 lives.
+Steps. Show one life. How? I can use heart img. 
