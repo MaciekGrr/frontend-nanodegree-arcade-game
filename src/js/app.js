@@ -1,7 +1,14 @@
-const modalBtn = document.getElementById('modal-btn');
-const modalBox = document.getElementById('win-modal');
+const modalPlayerSelection = document.getElementById('ps-modal'),
+	charBoy = document.getElementById('boy'),
+	charCatGirl = document.getElementById('cat-girl'),
+	modalWin = document.getElementById('win-modal'),
+	modalBtn = document.getElementById('modal-btn'),
+	modalGameOver = document.getElementById('game-over-modal')
+var heartN1 = document.getElementById('heart1'),
+	heartN2 = document.getElementById('heart2'),
+	heartN3 = document.getElementById('heart3');
 
-// Enemies our player must avoid
+	// Enemies our player must avoid
 var Enemy = function (x, y) {
 	// Variables applied to each of our instances go here,
 	// we've provided one for you to get started
@@ -64,15 +71,25 @@ Enemy.prototype.render = function () {
 
 // Parameter: check if enemy and player collide.
 // If so, reset player to its initial location
-Enemy.prototype.isCollide = function () {
+Enemy.prototype.handleCollisions = function () {
 
 	if (this.x < player.x + player.width &&
 		this.x + this.width > player.x &&
 		this.y < player.y + player.height &&
 		this.y + this.height > player.y) {
 
-		player.x = 200;
-		player.y = 400;
+		// Handle lives 
+		if (player.lives === 3) {
+			player.loseLife(player.life1);
+		} else if (player.lives === 2) {
+			player.loseLife(player.life2);
+		} else {
+			// Handle Game Over
+			player.isGameOver = true;
+			setTimeout(function () {
+				player.endGame();
+			}, 1000);
+		}
 	}
 }
 
@@ -97,13 +114,17 @@ var Player = function () {
 	this.isKeyUp = true;
 
 	this.direction = '';
-
+	
 	// Set player character
 	this.sprite = 'images/char-boy.png';
-	
-	// Set player life
-	this.life = 'images/Heart.png';
-	
+
+	this.lives = 3;
+
+	this.life1 = heartN1;
+	this.life2 = heartN2;
+	this.life3 = heartN3;
+
+	this.isGameOver = false;
 }
 
 // Updates player position
@@ -135,14 +156,12 @@ Player.prototype.handleInput = function (key) {
 	} else if (key === 'left' && this.isKeyUp && this.x > 33) {
 		this.direction = 'left';
 		this.speed = 4000;
-	} else if (key === 'up' && this.isKeyUp && this.y > 41) {
+	} else if (key === 'up' && this.isKeyUp && this.y > 45) {
 		this.direction = 'up';
 		this.speed = 3100;
-	} else if (key === 'up' && this.isKeyUp && this.y < 41) {
-		// display win modal
-		setTimeout(function () {
-			modalBox.style.display = 'block';
-		}, 200);
+	} else if (key === 'up' && this.isKeyUp && this.y < 45) {
+		// Player wins
+		player.winGame();
 	} else if (key === 'down' && this.isKeyUp && this.y < 400) {
 		this.direction = 'down';
 		this.speed = 3100;
@@ -151,12 +170,37 @@ Player.prototype.handleInput = function (key) {
 }
 
 // Player render() method: draws player character on the screen
-Player.prototype.render = function () {
+Player.prototype.render = function (sprite) {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-//Player.prototype.isGameWon = function () {
-//}
+// Player method: 
+// - at collision decrease lives by 1
+// - hide a heart
+Player.prototype.loseLife = function (life) {
+	player.lives--;
+	life.style.display = 'none';
+	player.x = 200;
+	player.y = 400;
+}
+
+Player.prototype.winGame = function () {
+	modalWin.style.display = 'block';
+}
+
+// Player method: 
+// - show game over modal
+// - reset game on spacebar press
+Player.prototype.endGame = function () {
+	player.isGameOver = true;
+	modalGameOver.style.display = 'block';
+	document.addEventListener('keydown', function (e) {
+		if (e.keyCode === 32) {
+			window.location.reload(false);
+		}
+	})
+
+}
 
 // Instantiate player object
 var player = new Player();
@@ -188,6 +232,16 @@ document.addEventListener('keyup', function (e) {
 });
 
 modalBtn.addEventListener('click', function () {
-	//modalBox.style.display = 'none';
+	//winModal.style.display = 'none';
 	window.location.reload(false);
+})
+
+modalPlayerSelection.addEventListener('click', function(e){
+	if(e.target == charBoy){
+		sprite = charBoy.src;
+		console.log(sprite);
+	} else {
+		sprite = charCatGirl.src;
+		console.log(sprite);
+	}
 })

@@ -385,7 +385,7 @@ Let's implement additional features w/game assets for now. The rest can come lat
 It's not a game that'll make or break job. It's websites. So this is nice ok, but that's it. Add custom features but leave thme as it is.
 
 [Features I can add: 
-* lives
+v lives               <-
 * char selection
 * levels]
 
@@ -399,3 +399,36 @@ Player should start with 3 lives. Each time he hits a bug loses one. When lives 
 
 TODO: show 3 lives.
 Steps. Show one life. How? I can use heart img. 
+
+***
+
+# Day 7 - Wed 25/4/18
+[Features I can add: 
+v. 1 lives               <-
+2 char selection
+3 levels]
+
+TODO:
+v show 3 lives
+v lose 1 life at collision
+v if life === 0: gameover
+v add gameover screen
+Those hearts can go on bottom-left corner of screen. Use position: absolute.
+
+6:23am - show lives on top of canvas. There is some blank space but that's due to canvas, not to game panel. Implemented life loss and gameover condition inside Enemy.isCollide(). Best guess because I'm already handling collision there so.
+...
+Made life loss more OOP-oriented. Just created a method that handles it. Added heart els to Player. Called life loss method on collision w/enemy.
+...
+Now I can handle the game over modal. 
+So the opening of it can have transition. So modal screen has black background w/ white, blinking writing on it "Game over :( \n Press space bar to play again". Then add evt lstnr that when user clicks on spacebar, it triggers page reload (like I did for game win).
+TODO:
+v- add modal
+v- style it 
+v- add transition to it
+v- trigger it in player.endGame() -> set gameover bool false. Run game when false. When game is over set bool to true, stop update a 500ms later transition to gameover modal.
+v- add evt lstnr for spacebar keydown: reload page
+v- center hearts 
+
+9:48am - next thing to handle is to add char selection feature.
+...
+TODO: add char selection. Need to write down how to tell the program which character to use, based on selection. Not sure I understand how sprite load n' display works. Need to think about that.

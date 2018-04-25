@@ -10,15 +10,58 @@
 </head>
 
 <body>
-	<div class="page-wrapper">
-		<section class="lives">
-			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart" id="heart-1">
-			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart" id="heart-2">
-			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart" id="heart-3">
-		</section>	
-	</div>
+	<!-- GAME PANEL -->
+	<section class="game-panel">
+		<div class="lives">
+			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart heart-1" id="heart1">
+			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart heart-1" id="heart2">
+			<img src="images/Heart.png" alt="Heart representing a character's life" class="heart heart-1" id="heart3">
+		</div>
+	</section>
+	<!-- PLAYER SELECTION MODAL -->
+	<section class="modal modal--ps" id="ps-modal">
+		<div class="modal__content modal__content--ps">
+			<h2 class="modal__header modal__header--ps">
+				Are you a boy or a girl?
+			</h2>
+			<div class="modal__select-player">
+				<div class="modal__player">
+					<img src="images/char-boy.png" alt="Avatar for male player" class="modal__player-img" id="boy">
+				</div>
+				<div class="modal__player">
+					<img src="images/char-cat-girl.png" alt="Avatar for female player" class="modal__player-img" id="cat-girl">
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- WIN MODAL -->
+	<section class="modal modal--win" id="win-modal">
 
+		<div class="modal__content modal__content--win">
 
+			<h2 class="modal__header modal__header--win">
+				Congratulations!
+			</h2>
+
+			<p class="modal__text modal__text--win">
+				You won!
+			</p>
+
+			<button class="modal__btn hoverable" id="modal-btn">Play again</button>
+		</div>
+
+	</section>
+	<!--GAME OVER MODAL-->
+	<section class="modal modal--game-over" id="game-over-modal">
+		<div class="modal__content modal__content--game-over">
+			<h2 class="modal__header modal__header--game-over">
+				Game Over :(
+			</h2>
+			<p class="modal__text modal__text--game-over">
+				Press spacebar to restart
+			</p>
+		</div>
+	</section>
 	<!-- GAME RESOURCES  -->
 	<script src="js/resources.js"></script>
 	<!-- ENEMY AND PLAYER LOGIC -->

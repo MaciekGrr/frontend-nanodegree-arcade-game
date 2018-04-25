@@ -1,6 +1,12 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
+/* 
+	---------------------------------------------
+	---------------------------------------------
+					RESET
+	http://meyerweb.com/eric/tools/css/reset/ 
+	v2.0 | 20110126
+	License: none (public domain)
+	---------------------------------------------
+	---------------------------------------------
 */
 
 html, body, div, span, applet, object, iframe,
@@ -49,22 +55,93 @@ table {
 
 body {
     text-align: center;
+	max-width: 600px;
+	margin: 0 auto;
 }
 
+/*
+	---------------------------------------------
+	---------------------------------------------
+					KEYFRAMES
+	---------------------------------------------
+	---------------------------------------------
+*/
+
+@-webkit-keyframes blink {
+	from,
+	49.9% {
+		/*opacity: 0;*/
+		visibility: visible;
+	}
+	to,
+	50% {
+		visibility: hidden;
+	}
+}
+
+@keyframes blink {
+	from,
+	49.9% {
+		/*opacity: 0;*/
+		visibility: visible;
+	}
+	to,
+	50% {
+		visibility: hidden;
+	}
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+/*
+	---------------------------------------------
+	---------------------------------------------
+					MODALS
+	---------------------------------------------
+	---------------------------------------------
+*/
 .modal {
-    display: none;
     z-index: 1;
     position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
-    /* take full page */
-    height: 100%;
-    /* take full page */
+    width: 100%; /* take full page */
+    height: 100%; /* take full page */
     background-color: rgba(0, 0, 0, 0.5);
     /* opaque */
     -webkit-box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
+}
+
+.modal--win,
+.modal--game-over {
+	display: none;
+}
+
+.modal--game-over {
+	color: #ddd;
+	background: #222;
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
 }
 
 .modal__content {
@@ -80,12 +157,43 @@ body {
 	flex-direction: column;
 	-ms-flex-pack: distribute;	
 	justify-content: space-around;
-    background-color: #ddd;
 	margin: 5em auto;
     -webkit-animation-name: fadeIn;
     animation-name: fadeIn;
     -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+}
+
+.modal__content--win {
+	background-color: #ddd;
+}
+
+.modal__content--ps {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+}
+
+.modal__select-player {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+}
+
+.modal__player-img:hover {
+	cursor: pointer;
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+	-webkit-transition: 1s ease-in-out;
+	-webkit-transition: .1s ease-in-out;
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
 }
 
 .modal__header,
@@ -99,7 +207,16 @@ body {
 	font-size: 4em;
 }
 
+.modal__header--ps {
+	font-size: 3em;
+}
+
 .modal__text {
+	font-size: 3em;
+}
+
+
+.modal__text--win {
 	font-size: 3em;
     color: #000;
 }
@@ -120,16 +237,61 @@ body {
 	padding: 0.8em;
 	font-size: 2em;
 	cursor: pointer;
-	-webkit-transition: .2s ease-in-out;
-	transition: .2s ease-in-out;
+	-webkit-transition: .3s ease-in-out;
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+.modal__text--game-over {
+	-webkit-animation-name: blink;
+	animation-name: blink;
+	-webkit-animation-duration: 1.5s;
+	animation-duration: 1.5s;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+}
+
+.modal__content--ps {
+	background: #ddd;
+	border: 10px solid #916521;
 }
 
 /*
-	----------------------------------------
-	----------------------------------------
-			
+	---------------------------------------------
+	---------------------------------------------
+			 		GAME PANEL
+	---------------------------------------------
+	---------------------------------------------
 */
-
+.game-panel {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+}
+.lives {
+/*	width: 50%;*/
+}
 .heart {
-	max-width: 20%;
+	height: 100px;
+	-ms-flex-item-align: baseline;
+	align-self: baseline;
+}
+
+.heart-1 {
+	-webkit-box-ordinal-group: 4;
+	-ms-flex-order: 3;
+	order: 3;
+}
+.heart-2 {
+	-webkit-box-ordinal-group: 3;
+	-ms-flex-order: 2;
+	order: 2;
+}
+.heart-3 {
+	-webkit-box-ordinal-group: 2;
+	-ms-flex-order: 1;
+	order: 1;
 }
