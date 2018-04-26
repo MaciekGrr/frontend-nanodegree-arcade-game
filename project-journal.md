@@ -387,7 +387,8 @@ It's not a game that'll make or break job. It's websites. So this is nice ok, bu
 [Features I can add: 
 v lives               <-
 * char selection
-* levels]
+* make it responsive
+* build production version]
 
 Let's start, then let's see.
 
@@ -404,9 +405,10 @@ Steps. Show one life. How? I can use heart img.
 
 # Day 7 - Wed 25/4/18
 [Features I can add: 
-v. 1 lives               <-
-2 char selection
-3 levels]
+v lives               <-
+v char selection
+* make it responsive
+* build production version]
 
 TODO:
 v show 3 lives
@@ -432,3 +434,70 @@ v- center hearts
 9:48am - next thing to handle is to add char selection feature.
 ...
 TODO: add char selection. Need to write down how to tell the program which character to use, based on selection. Not sure I understand how sprite load n' display works. Need to think about that.
+
+***
+
+# Day 8 - Thu 26/4/18
+5:15am - all sprites are loaded in Engine.js because it uses Resource.js helper functions to do that. So, as the game begins chars sprites are loaded in Engine->Resources.load()
+Then when game starts sprites are rendered by main()->render()->renderEntities()->player.render(). This:
+
+Player.prototype.render = function (sprite) {
+	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+So player.sprite is just a string. We define it so we can easily pass it into Resource.get(url).
+Resource.get(url) will then look for this url in the cached resources arr and return the img if found. ctx.drawImage build on this by rendering the img on the screen.
+
+So I can act on player.sprite. I can leave the defult BUT can surely change it.
+
+Try: if click on girl, this.sprite = girl url
+Yeah it was that easy. 
+...It worked.
+
+Next: add a button that on click closes player modal.
+
+7:19am - how to use oop to render char based on what el clicked on modal?
+
+8:12am - need to communicate selection to player.sprite
+player.sprite can be:
+- player.sprite.charBoy
+- player.sprite.charCatGirl
+while selection can return:
+-
+...
+Implemented it in the simplest way: assign sprite url based on charDOM selected. Like before. So I just wasted 1 hour. Learned: keep it simple.
+...
+What I can do now is to extend selection to all available chars
+...
+
+TODO: fix bug: .selected gets added to container div too
+
+11:27am - ok. So the problem was scope-related I guess. I solved it by storing all char els in var. Then I used it to loop through each char. For each char, when clicked add 'selected' class and remove it from other chars. 
+...
+TODO: make game responsive (in the limit of canvas)
+...
+Done by putting max-width e regulating fonts dims with mediaqs
+
+TODO: when reload page, save selection. Submit selection w/enter+btns
+...
+
+1:00pm - so:
+* save selection for next refresh
+v add enter to win and select char modals
+
+TODO: save selection for next refresh
+Start w/char already w/selected class. 
+...
+Solved. Problem was that I had added 'selected' to  char img, not container.
+Next is to refactor, send to production and submit
+
+TODO:
+v* refactor JS
+v* refactor CSS
+v* refactor HTML
+* send to production
+* push
+* test production
+* if prod works, submit project
+
+For some reason minified files are ctually bigger than original, plus they don't get in onestring. Check it tomorrow.

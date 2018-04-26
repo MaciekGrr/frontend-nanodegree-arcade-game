@@ -1,14 +1,19 @@
-const modalPlayerSelection = document.getElementById('ps-modal'),
-	charBoy = document.getElementById('boy'),
-	charCatGirl = document.getElementById('cat-girl'),
+const modalC = document.getElementById('c-modal'),
 	modalWin = document.getElementById('win-modal'),
-	modalBtn = document.getElementById('modal-btn'),
-	modalGameOver = document.getElementById('game-over-modal')
-var heartN1 = document.getElementById('heart1'),
+	modalGameOver = document.getElementById('game-over-modal'),
+	modalBtnWin = document.getElementById('modal-btn-win'),
+	modalBtnC = document.getElementById('modal-btn-c');
+var characters = modalC.getElementsByClassName('modal__character'),
+	isCharSelected = true,
+heartN1 = document.getElementById('heart1'),
 	heartN2 = document.getElementById('heart2'),
 	heartN3 = document.getElementById('heart3');
 
-	// Enemies our player must avoid
+/*
+	-------------------------------------------ENEMY CLASS
+*/
+
+// Enemies our player must avoid
 var Enemy = function (x, y) {
 	// Variables applied to each of our instances go here,
 	// we've provided one for you to get started
@@ -19,6 +24,7 @@ var Enemy = function (x, y) {
 	// Set enemy initial location
 	this.y = 60;
 
+	// set width and height: to use in Enemy.handleCollision() method 
 	this.width = 80;
 	this.height = 40;
 
@@ -27,8 +33,7 @@ var Enemy = function (x, y) {
 	this.speed = 400; // medium
 	this.speed = 500; // high
 
-	// The image/sprite for our enemies, this uses
-	// a helper we've provided to easily load images
+	// The image/sprite for our enemies, this uses a helper we've provided to easily load images
 	this.sprite = 'images/enemy-bug.png';
 };
 
@@ -69,8 +74,10 @@ Enemy.prototype.render = function () {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Parameter: check if enemy and player collide.
-// If so, reset player to its initial location
+/* 
+ * Parameter: check if enemy and player collide.
+ * If so, reset player to its initial location
+ */
 Enemy.prototype.handleCollisions = function () {
 
 	if (this.x < player.x + player.width &&
@@ -94,8 +101,8 @@ Enemy.prototype.handleCollisions = function () {
 }
 
 
-/*-----------------------------------------------------------------
- *-----------------------------------------------------------------
+/*
+	----------------------------------------------PLAYER CLASS
  */
 
 // Player class
@@ -110,20 +117,26 @@ var Player = function () {
 
 	// Set initial speed
 	this.speed;
-
+	
+	// Boolean: to use in Player.handleInput() method
 	this.isKeyUp = true;
 
+	// Set player directon. Empty.
+	// It changes in player.handleInput() to give direction to movement
 	this.direction = '';
-	
+
 	// Set player character
 	this.sprite = 'images/char-boy.png';
 
+	// Set player initial lives number
 	this.lives = 3;
 
+	// Assign hearts elements to three variables. To use in player.loseLife() method
 	this.life1 = heartN1;
 	this.life2 = heartN2;
 	this.life3 = heartN3;
 
+	// Boolean. Use it to check if game is over 
 	this.isGameOver = false;
 }
 
@@ -146,7 +159,10 @@ Player.prototype.update = function (dt) {
 
 }
 
-// Player handleInput() method
+/* Player handleInput() method:
+ * based on key input sets direction, speed
+ * and checks win conditions
+*/
 Player.prototype.handleInput = function (key) {
 
 	// handle direction and speed of movement
@@ -166,17 +182,17 @@ Player.prototype.handleInput = function (key) {
 		this.direction = 'down';
 		this.speed = 3100;
 	}
-
 }
 
 // Player render() method: draws player character on the screen
-Player.prototype.render = function (sprite) {
+Player.prototype.render = function () {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Player method: 
-// - at collision decrease lives by 1
-// - hide a heart
+/* Player method: 
+ * at collision decrease lives by 1
+ * hide a heart
+ */ 
 Player.prototype.loseLife = function (life) {
 	player.lives--;
 	life.style.display = 'none';
@@ -184,18 +200,35 @@ Player.prototype.loseLife = function (life) {
 	player.y = 400;
 }
 
+/*
+ * Invoked when player wins the game:
+ * displays win modal
+ * reloads page if player hits enter or clicks on modal button
+*/
 Player.prototype.winGame = function () {
 	modalWin.style.display = 'block';
+
+	document.addEventListener('keydown', function (e) {
+		if (e.keyCode === 13) {
+			reloadAfterWin();
+		}
+	})
+
+	modalBtnWin.addEventListener('click', function () {
+		reloadAfterWin();
+	})
 }
 
-// Player method: 
-// - show game over modal
-// - reset game on spacebar press
+/* Player method: 
+ * show game over modal
+ + reset game on spacebar press
+*/ 
 Player.prototype.endGame = function () {
 	player.isGameOver = true;
 	modalGameOver.style.display = 'block';
 	document.addEventListener('keydown', function (e) {
-		if (e.keyCode === 32) {
+		if (e.keyCode === 32 || e.keyCode === 13) {
+			isCharSelected = false;
 			window.location.reload(false);
 		}
 	})
@@ -213,10 +246,20 @@ var enemy2 = new Enemy();
 // Instantiate allEnemies object
 var allEnemies = [];
 
+// Push enemies into allEnemies[]
 allEnemies.push(enemy0, enemy1, enemy2);
 
+/*
+ * when player wins it sets isCharSelected to false
+ * and reloads the page
+*/
+function reloadAfterWin() {
+	isCharSelected = false;
+	window.location.reload(false);
+}
+
+
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function (e) {
 	var allowedKeys = {
 		37: 'left',
@@ -231,17 +274,48 @@ document.addEventListener('keyup', function (e) {
 
 });
 
-modalBtn.addEventListener('click', function () {
-	//winModal.style.display = 'none';
-	window.location.reload(false);
-})
+/*
+ * Iterate through DOM character div containers
+ * When user clicks a character:
+ * if other characters have class 'selected', remove it abd sets isCharSelected to false
+ * add class 'selected' to clicked character
+ * set isCharSelected to true
+ * based on character's id, set player.sprite to related image url
+ */
+for (let character of characters) {
+	character.addEventListener('click', function (e) {
 
-modalPlayerSelection.addEventListener('click', function(e){
-	if(e.target == charBoy){
-		sprite = charBoy.src;
-		console.log(sprite);
-	} else {
-		sprite = charCatGirl.src;
-		console.log(sprite);
+		for (let character of characters) {
+			character.classList.remove('selected');
+			isCharSelected = false;
+		}
+
+		this.classList.add('selected');
+
+		isCharSelected = true;
+
+		if (e.target.id === 'boy') {
+			player.sprite = 'images/char-boy.png';
+		} else if (e.target.id === 'cat-girl') {
+			player.sprite = 'images/char-cat-girl.png';
+		} else if (e.target.id === 'horn-girl') {
+			player.sprite = 'images/char-horn-girl.png';
+		} else if (e.target.id === 'pink-girl') {
+			player.sprite = 'images/char-pink-girl.png';
+		} else {
+			player.sprite = 'images/char-princess-girl.png';
+		}
+	})
+}
+
+/*
+ * On character modal. If and when user clicks the button:
+ * if no character was selected, don't do anything
+ * else hide modal
+ */
+modalBtnC.addEventListener('click', function () {
+	if (isCharSelected == false) {
+		return;
 	}
+	modalC.style.display = 'none';
 })

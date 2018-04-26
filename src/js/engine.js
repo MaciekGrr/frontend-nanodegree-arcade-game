@@ -38,7 +38,7 @@ var Engine = (function (global) {
 		 * would be the same for everyone (regardless of how fast their
 		 * computer is) - hurray time!
 		 */
-		
+
 		var now = Date.now(),
 			dt = (now - lastTime) / 1000.0,
 			sprite = "";
@@ -46,7 +46,7 @@ var Engine = (function (global) {
 		/* Call our update/render functions, pass along the time delta to
 		 * our update function since it may be used for smooth animation.
 		 */
-		if(player.isGameOver == false){
+		if (player.isGameOver == false) {
 			update(dt);
 		}
 		render();
@@ -59,8 +59,8 @@ var Engine = (function (global) {
 		/* Use the browser's requestAnimationFrame function to call this
 		 * function again as soon as the browser is able to draw another frame.
 		 */
-		if(player.isGameOver == false){
-			win.requestAnimationFrame(main);	
+		if (player.isGameOver == false) {
+			win.requestAnimationFrame(main);
 		}
 	}
 
@@ -157,7 +157,7 @@ var Engine = (function (global) {
 				ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
 			}
 		}
-		
+
 		renderEntities();
 	}
 
@@ -185,14 +185,17 @@ var Engine = (function (global) {
 	 * draw our game level. Then set init as the callback method, so that when
 	 * all of these images are properly loaded our game will start.
 	 */
-		
+
 	Resources.load([
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-		'images/char-cat-girl.png'
+		'images/char-cat-girl.png',
+		'images/char-horn-girl.png',
+		'images/char-pink-girl.png',
+		'images/char-princess-girl.png'
 	]);
 	Resources.onReady(init);
 

@@ -6,9 +6,7 @@ const gulp = require('gulp'),
       cssnano = require('gulp-cssnano'),
       image = require("gulp-image"),
       imagemin = require('gulp-imagemin'),
-      pngquant = require('imagemin-pngquant'),
-      responsive = require("gulp-responsive"),
-      $ = require("gulp-load-plugins")(),
+      imageminPngquant = require('imagemin-pngquant'),
       cache = require('gulp-cache'),
       del = require('del'),
       runSequence = require('run-sequence'),
@@ -111,29 +109,28 @@ gulp.task('useref', function() {
 
   return gulp.src('src/*.html')
     .pipe(useref())
-    .pipe(babel())
+    //.pipe(babel())
     .pipe(sourcemaps.init())
-    .pipe(gulpIf('./js/**/*.js', uglify()))
-    .pipe(gulpIf('./css/**/*.css', cssnano()))
-    .pipe(sourcemaps.write())
+    .pipe(gulpIf('src/js/**/*.js', uglify()))
+    .pipe(gulpIf('src/css/**/*.css', cssnano()))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('docs'));
 });
 
 // Optimizing Images 
 gulp.task('imagemin', function() {
   return gulp.src('src/images/**/*.+(png|jpg|jpeg|gif|svg)')
-    // Caching images that ran through imagemin
     .pipe(imagemin({
       progressive: true,
       interlaced: true,
-      use: [pngquant()]
+	  use: [imageminPngquant()]
     }))
     .pipe(gulp.dest('docs/images'))
 });
 
 // Compress Images
 gulp.task("images:compress", function () {
-    gulp.src("images_src/**/*.*")
+    gulp.src("images/**/*.*")
     .pipe(image({
         jpegRecompress: ['--strip', '--quality', 'medium', '--min', 6, '--max', 8],
         jpegoptim: false,
@@ -151,10 +148,8 @@ gulp.task('fonts', function() {
 
 // Cleaning 
 gulp.task('clean', function() {
-  return del.sync('docs').then(function(cb) {
-    return cache.clearAll(cb);
-  });
-})
+  return del.sync('docs');
+});
 
 //gulp.task('clean:docs', function() {
 //  return del.sync(['docs/**/*', 'docs/images', 
@@ -175,7 +170,7 @@ gulp.task('default', function(callback) {
 
 // Build production version
 gulp.task('build', function(callback) {
-  runSequence('clean', ['useref', 'images:minify', 'fonts'],
+  runSequence('clean', ['useref', 'imagemin', 'fonts'],
     callback
   )
 });
