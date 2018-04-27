@@ -501,3 +501,11 @@ v* refactor HTML
 * if prod works, submit project
 
 For some reason minified files are ctually bigger than original, plus they don't get in onestring. Check it tomorrow.
+
+***
+
+# Day 9 - Wed 27/4/18
+6:30am - Isolated uglify js in a separate task. Found the js min problem: uglify wasn't updated with es6 syntax, so installed new gulp-ugify-es and worked.
+
+7:27 css min works too, prob was not specified complete path.
+TODO: complete min:js and min:css by including concatenation + sourcemaps in both
