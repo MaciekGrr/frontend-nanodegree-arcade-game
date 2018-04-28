@@ -19,7 +19,7 @@ If you want to contribute to this project:
 git clone git@github.com:<your_username>/frontend-nanodegree-arcade-game.git
 ```
 
-* read [understading-the-project.md](/understading-the-project.md?raw=true)
+* read [understading-the-project.md](/understanding-the-project.md?raw=true)
 * use `app.js` to edit Enemy and Player classes
 * `resources.js` loads images needed for the canvas
 * `engine.js` handles the game loop
