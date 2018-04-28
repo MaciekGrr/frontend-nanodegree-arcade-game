@@ -247,10 +247,31 @@ canvas {
 	overflow: scroll;
 }
 .modal__character:first-of-type {
-	-webkit-box-ordinal-group: 4;
+	-webkit-box-ordinal-group: 3;
 	-ms-flex-order: 3;
 	order: 3;
 }
+.modal__character:nth-of-type(2){
+	-webkit-box-ordinal-group: 1;
+	-ms-flex-order: 1;
+	order: 1;
+}
+.modal__character:nth-of-type(3) {
+	-webkit-box-ordinal-group: 2;
+	-ms-flex-order: 2;
+	order: 2;
+}
+.modal__character:nth-of-type(4) {
+	-webkit-box-ordinal-group: 4;
+	-ms-flex-order: 4;
+	order: 4;
+}
+.modal__character:nth-of-type(5) {
+	-webkit-box-ordinal-group: 5;
+	-ms-flex-order: 5;
+	order: 5;
+}
+
 .modal__character-img:hover {
 	cursor: pointer;
 	-webkit-transform: scale(1.1);

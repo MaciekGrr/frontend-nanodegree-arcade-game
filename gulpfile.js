@@ -1,6 +1,7 @@
 const gulp = require('gulp'),
 	browserSync = require('browser-sync'),
 	useref = require('gulp-useref'),
+	concat = require('gulp-concat'),
 	uglify = require('gulp-uglify-es').default,
 	pump = require('pump'),
 	gulpIf = require('gulp-if'),
@@ -15,7 +16,8 @@ const gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	eslint = require('gulp-eslint'),
 	babel = require('gulp-babel'),
-	sourcemaps = require('gulp-sourcemaps');
+	sourcemaps = require('gulp-sourcemaps'),
+	lazypipe = require('lazypipe');
 
 
 // Development Tasks 
@@ -29,6 +31,14 @@ gulp.task('browserSync', function () {
 		}
 	})
 })
+
+// Copy index.html into docs/
+gulp.task('html', function() {
+	return gulp.src('src/index.html')
+		.pipe(gulp.dest('docs'))
+})
+
+// Sass task goes here
 
 // eslint
 gulp.task('lint', () => {
@@ -48,9 +58,6 @@ gulp.task('lint', () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('default', ['lint'], function () {
-	// This will only run if the lint task is successful...
-});
 
 // Watchers
 gulp.task('watch', function () {
@@ -116,37 +123,44 @@ gulp.task("images:responsive", function () {
 // Optimization Tasks 
 // ------------------
 
-// Minify JS
-gulp.task('minify:js', function (cb) {
+// Concatenate and minify JS files
+gulp.task('scripts', function (cb) {
+	// Pump prints human-friendly errors to the console
 	pump([
 		gulp.src('src/js/**/*.js'),
-		uglify(),
-		gulp.dest('docs')
-	], cb);
+		sourcemaps.init(),
+		concat('all.js'), // Concatenate js files
+		uglify(), // Minify all.js
+		sourcemaps.write('.'), // Write sourcemap file in same dest folder
+		gulp.dest('docs/js')
+		], cb);
+})
+
+gulp.task('useref', function(){
+	return gulp.src('src/index.html')
+		.pipe(sourcemaps.init())
+		.pipe(useref({}, lazypipe().pipe(sourcemaps.init, {loadMaps: true})))
+		.pipe(gulpIf('*.css', cleanCSS({
+			compatibility: 'ie8'
+		})))		
+		.pipe(gulpIf('*.js', uglify()))
+		.pipe(sourcemaps.write('.')) // Write sourcemap file in same dest folder
+		.pipe(gulp.dest('docs'));
 })
 
 // Minify CSS
-gulp.task('minify:css', function(){
+gulp.task('styles', function () {
 	return gulp.src('src/css/**/*.css')
-	.pipe(cleanCSS({compatibility: 'ie8'}))
-	.pipe(gulp.dest('docs'));
+		.pipe(sourcemaps.init())
+		.pipe(cleanCSS({
+			compatibility: 'ie8'
+		}))
+		.pipe(sourcemaps.write('.')) // Write sourcemap file in same dest folder
+		.pipe(gulp.dest('docs/css'));
 })
 
-// Optimizing CSS and JavaScript 
-gulp.task('useref', function () {
-
-	return gulp.src('src/*.html')
-		.pipe(useref())
-		//.pipe(babel())
-		.pipe(sourcemaps.init())
-		.pipe(gulpIf('src/js/**/*.js', uglify()))
-		.pipe(gulpIf('src/css/**/*.css', cssnano()))
-		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest('docs'));
-});
-
 // Optimizing Images 
-gulp.task('imagemin', function () {
+gulp.task('images', function () {
 	return gulp.src('src/images/**/*.+(png|jpg|jpeg|gif|svg)')
 		.pipe(imagemin({
 			progressive: true,
@@ -179,11 +193,6 @@ gulp.task('clean', function () {
 	return del.sync('docs');
 });
 
-gulp.task('clean:docs', function () {
-	return del.sync(['docs/**/*', 'docs/images',
-       'docs/images/**/*']);
-});
-
 // Build Sequences
 // ---------------
 
@@ -197,8 +206,13 @@ gulp.task('default', function (callback) {
 
 
 // Build production version
+//gulp.task('build', function (callback) {
+//	runSequence('clean', ['html', 'styles', 'scripts', 'images', 'fonts'],
+//		callback
+//	)
+//});
 gulp.task('build', function (callback) {
-	runSequence('clean:docs', ['useref', 'imagemin', 'fonts'],
+	runSequence('clean', ['useref', 'images', 'fonts'],
 		callback
 	)
 });

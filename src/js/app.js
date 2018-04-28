@@ -5,9 +5,15 @@ const modalC = document.getElementById('c-modal'),
 	modalBtnC = document.getElementById('modal-btn-c');
 var characters = modalC.getElementsByClassName('modal__character'),
 	isCharSelected = true,
-heartN1 = document.getElementById('heart1'),
+	heartN1 = document.getElementById('heart1'),
 	heartN2 = document.getElementById('heart2'),
 	heartN3 = document.getElementById('heart3');
+
+(function () {
+	characters.item(localStorage.getItem('myValue')).classList.add('selected');
+	//player.sprite = localStorage.getItem('myChar');
+	isCharSelected = true;
+})();
 
 /*
 	-------------------------------------------ENEMY CLASS
@@ -117,7 +123,7 @@ var Player = function () {
 
 	// Set initial speed
 	this.speed;
-	
+
 	// Boolean: to use in Player.handleInput() method
 	this.isKeyUp = true;
 
@@ -125,8 +131,18 @@ var Player = function () {
 	// It changes in player.handleInput() to give direction to movement
 	this.direction = '';
 
-	// Set player character
-	this.sprite = 'images/char-boy.png';
+	/*
+	 * Set player character:
+	 * use localStorage to retreive last saved sprite's path
+	 * if theres' one, set it for our sprite
+	 * else use predefined sprite (char-boy)
+	 */
+	if (localStorage.myChar) {
+		console.log(localStorage.myChar);
+		this.sprite = localStorage.myChar;
+	} else {
+		this.sprite = 'images/char-boy.png';
+	}
 
 	// Set player initial lives number
 	this.lives = 3;
@@ -162,7 +178,7 @@ Player.prototype.update = function (dt) {
 /* Player handleInput() method:
  * based on key input sets direction, speed
  * and checks win conditions
-*/
+ */
 Player.prototype.handleInput = function (key) {
 
 	// handle direction and speed of movement
@@ -192,7 +208,7 @@ Player.prototype.render = function () {
 /* Player method: 
  * at collision decrease lives by 1
  * hide a heart
- */ 
+ */
 Player.prototype.loseLife = function (life) {
 	player.lives--;
 	life.style.display = 'none';
@@ -204,7 +220,7 @@ Player.prototype.loseLife = function (life) {
  * Invoked when player wins the game:
  * displays win modal
  * reloads page if player hits enter or clicks on modal button
-*/
+ */
 Player.prototype.winGame = function () {
 	modalWin.style.display = 'block';
 
@@ -219,20 +235,23 @@ Player.prototype.winGame = function () {
 	})
 }
 
-/* Player method: 
+/*
+ * Player method: 
  * show game over modal
- + reset game on spacebar press
-*/ 
+ * reset game on spacebar press
+ */
 Player.prototype.endGame = function () {
 	player.isGameOver = true;
 	modalGameOver.style.display = 'block';
-	document.addEventListener('keydown', function (e) {
-		if (e.keyCode === 32 || e.keyCode === 13) {
-			isCharSelected = false;
-			window.location.reload(false);
-		}
-	})
-
+	['keydown', 'ontouchstart'].forEach(listener =>
+		document.addEventListener(listener, function (e) {
+			// Handle spacebar/enter press or taps on screen
+			if ((listener === 'keydown' && e.keyCode === 32 || e.keyCode === 13) || 
+				 listener === 'ontouchstart') {
+				window.location.reload(false);
+			}
+		}, false)
+	)
 }
 
 // Instantiate player object
@@ -252,9 +271,9 @@ allEnemies.push(enemy0, enemy1, enemy2);
 /*
  * when player wins it sets isCharSelected to false
  * and reloads the page
-*/
+ */
 function reloadAfterWin() {
-	isCharSelected = false;
+	//isCharSelected = false;
 	window.location.reload(false);
 }
 
@@ -292,7 +311,11 @@ for (let character of characters) {
 
 		this.classList.add('selected');
 
+		savedChar = getIndex(character);
+
 		isCharSelected = true;
+
+		localStorage.setItem('myValue', savedChar);
 
 		if (e.target.id === 'boy') {
 			player.sprite = 'images/char-boy.png';
@@ -305,6 +328,10 @@ for (let character of characters) {
 		} else {
 			player.sprite = 'images/char-princess-girl.png';
 		}
+
+		localStorage.setItem('myChar', player.sprite);
+		console.log(localStorage);
+
 	})
 }
 
@@ -319,3 +346,15 @@ modalBtnC.addEventListener('click', function () {
 	}
 	modalC.style.display = 'none';
 })
+
+function getIndex(el) {
+	let children = el.parentElement.children,
+		i;
+	for (let i = 0, len = children.length; i < len; i++) {
+		// Chek if el at position i is the selected character
+		// if so, get its index
+		if (children[i] === el) {
+			return i;
+		}
+	}
+}

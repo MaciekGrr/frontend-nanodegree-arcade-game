@@ -15,6 +15,7 @@
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cache": "^0.4.1",
     "gulp-clean-css": "^3.9.3",
+    "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.0",
     "gulp-if": "^2.0.0",
     "gulp-image": "^4.2.0",
@@ -28,6 +29,7 @@
     "gulp-uglify-es": "^1.0.1",
     "gulp-useref": "^3.0.4",
     "imagemin-pngquant": "^4.2.2",
+    "lazypipe": "^1.0.1",
     "run-sequence": "^1.1.2"
   },
   "dependencies": {
