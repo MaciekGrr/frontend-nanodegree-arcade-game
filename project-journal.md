@@ -533,4 +533,4 @@ TODO: modify start char btn conditions.
 * else, use default one
 
 TODO: on game over modal, set reload on tap or spacebar. 
-...Trying to add both touch and keydown evt lstnr on same el.
+...Trying to add both touch and keydown evt lstnr on same el. Done by using forEach on array with evtlstnr strings.
