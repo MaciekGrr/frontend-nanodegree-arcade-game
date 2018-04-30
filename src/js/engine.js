@@ -71,7 +71,6 @@ var Engine = (function (global) {
 	function init() {
 		lastTime = Date.now();
 		main();
-		//reset();
 	}
 
 	/* This function is called by main (our game loop) and itself calls all

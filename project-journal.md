@@ -496,12 +496,12 @@ v refactor JS
 v refactor CSS
 v refactor HTML
 v test production
-* fix default selection 
-* retest production
-* if(ok): send to production
-* write README.md
-* push
-* submit project
+v fix default selection 
+v retest production
+v if(ok): send to production
+v write README.md
+v push
+v submit project
 
 For some reason minified files are ctually bigger than original, plus they don't get in onestring. Check it tomorrow.
 
@@ -534,3 +534,17 @@ TODO: modify start char btn conditions.
 
 TODO: on game over modal, set reload on tap or spacebar. 
 ...Trying to add both touch and keydown evt lstnr on same el. Done by using forEach on array with evtlstnr strings.
+
+11:11am - project submitted. Waiting for review
+
+***
+
+# Day 10 - Sat 30/4/18
+6:24am - after review. Solved first issue with handle collision.
+
+Second issue is to create parent class w/Enemy-Player common things
+
+10:30am - only thing not working is render. On load, imgs are not rendered. 
+player renders. But if I want to render enemy sprite, it tells me the img is of type undefined.
+
+Can't believe it...The bug was in the url. I provided bug-enemy-png instead of enemy-bug.png

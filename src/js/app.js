@@ -11,37 +11,48 @@ var characters = modalC.getElementsByClassName('modal__character'),
 
 (function () {
 	characters.item(localStorage.getItem('myValue')).classList.add('selected');
-	//player.sprite = localStorage.getItem('myChar');
 	isCharSelected = true;
 })();
 
 /*
-	-------------------------------------------ENEMY CLASS
+	-------------------- PARRENT CLASS ----------------------
+*/
+
+class Character {
+	constructor(x, y, width, height, speed, sprite) {
+		// Set enemy location
+		this.x = x;
+
+		// Set enemy initial location
+		this.y = y;
+
+		// set width and height: to use in Enemy.handleCollision() method 
+		this.width = width;
+		this.height = height;
+
+		// Set enemy initial speed
+		this.speed = speed;
+
+		this.sprite = sprite;
+
+	}
+
+	render() {
+		//at this point the image hasn't been loaded yet
+		ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+	}
+}
+
+/*
+	------------------------------------------- SUBCLASS: ENEMY
 */
 
 // Enemies our player must avoid
-var Enemy = function (x, y) {
-	// Variables applied to each of our instances go here,
-	// we've provided one for you to get started
-
-	// Set enemy location
-	this.x = -120;
-
-	// Set enemy initial location
-	this.y = 60;
-
-	// set width and height: to use in Enemy.handleCollision() method 
-	this.width = 80;
-	this.height = 40;
-
-	// Set enemy initial speed
-	this.speed = 250; // low
-	this.speed = 400; // medium
-	this.speed = 500; // high
-
-	// The image/sprite for our enemies, this uses a helper we've provided to easily load images
-	this.sprite = 'images/enemy-bug.png';
-};
+class Enemy extends Character {
+	constructor(x, y, width, height, speed, sprite) {
+		super(x, y, width, height, speed, sprite);
+	}
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -77,6 +88,7 @@ Enemy.prototype.update = function (dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
+
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -108,52 +120,33 @@ Enemy.prototype.handleCollisions = function () {
 
 
 /*
-	----------------------------------------------PLAYER CLASS
+	---------------------------------------------- SUBCLASS: PLAYER
  */
 
 // Player class
-var Player = function () {
+class Player extends Character {
 
-	// Set initial location
-	this.x = 200;
-	this.y = 400;
+	constructor(x, y, width, height, speed, sprite, isKeyUp, direction, lives, life1, life2, life3, isGameOver) {
+		super(x, y, width, height, speed, sprite);
 
-	this.width = 80;
-	this.height = 40;
+		// Boolean: to use in Player.handleInput() method
+		this.isKeyUp = true;
 
-	// Set initial speed
-	this.speed;
+		// Set player directon. Empty.
+		// It changes in player.handleInput() to give direction to movement
+		this.direction = '';
 
-	// Boolean: to use in Player.handleInput() method
-	this.isKeyUp = true;
+		// Set player initial lives number
+		this.lives = 3;
 
-	// Set player directon. Empty.
-	// It changes in player.handleInput() to give direction to movement
-	this.direction = '';
+		// Assign hearts elements to three variables. To use in player.loseLife() method
+		this.life1 = heartN1;
+		this.life2 = heartN2;
+		this.life3 = heartN3;
 
-	/*
-	 * Set player character:
-	 * use localStorage to retreive last saved sprite's path
-	 * if theres' one, set it for our sprite
-	 * else use predefined sprite (char-boy)
-	 */
-	if (localStorage.myChar) {
-		console.log(localStorage.myChar);
-		this.sprite = localStorage.myChar;
-	} else {
-		this.sprite = 'images/char-boy.png';
+		// Boolean. Use it to check if game is over 
+		this.isGameOver = false;
 	}
-
-	// Set player initial lives number
-	this.lives = 3;
-
-	// Assign hearts elements to three variables. To use in player.loseLife() method
-	this.life1 = heartN1;
-	this.life2 = heartN2;
-	this.life3 = heartN3;
-
-	// Boolean. Use it to check if game is over 
-	this.isGameOver = false;
 }
 
 // Updates player position
@@ -201,9 +194,9 @@ Player.prototype.handleInput = function (key) {
 }
 
 // Player render() method: draws player character on the screen
-Player.prototype.render = function () {
-	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+//Player.prototype.render = function () {
+//	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+//}
 
 /* Player method: 
  * at collision decrease lives by 1
@@ -246,8 +239,8 @@ Player.prototype.endGame = function () {
 	['keydown', 'ontouchstart'].forEach(listener =>
 		document.addEventListener(listener, function (e) {
 			// Handle spacebar/enter press or taps on screen
-			if ((listener === 'keydown' && e.keyCode === 32 || e.keyCode === 13) || 
-				 listener === 'ontouchstart') {
+			if ((listener === 'keydown' && e.keyCode === 32 || e.keyCode === 13) ||
+				listener === 'ontouchstart') {
 				window.location.reload(false);
 			}
 		}, false)
@@ -255,12 +248,15 @@ Player.prototype.endGame = function () {
 }
 
 // Instantiate player object
-var player = new Player();
+var player = new Player(200, 400, 80, 45, 0);
+player.sprite = localStorage.myChar ? localStorage.myChar : 'images/char-boy.png';
 
 // Instantiate enemy objects
-var enemy0 = new Enemy();
-var enemy1 = new Enemy();
-var enemy2 = new Enemy();
+var enemy0 = new Enemy(-120, 60, 80, 40, 500, 'images/enemy-bug.png');
+var enemy1 = new Enemy(-120, 60, 80, 40, 500, 'images/enemy-bug.png');
+var enemy2 = new Enemy(-120, 60, 80, 40, 500, 'images/enemy-bug.png');
+
+var enemy0, enemy1, enemy2;
 
 // Instantiate allEnemies object
 var allEnemies = [];
