@@ -548,3 +548,5 @@ Second issue is to create parent class w/Enemy-Player common things
 player renders. But if I want to render enemy sprite, it tells me the img is of type undefined.
 
 Can't believe it...The bug was in the url. I provided bug-enemy-png instead of enemy-bug.png
+
+11:18am - submitted project w/corrections.
